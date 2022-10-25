@@ -1,4 +1,4 @@
-group 'ru.kovardin.rustore_push'
+group 'ru.kovardin.rustorepush'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -14,8 +14,11 @@ buildscript {
     }
 }
 
-allprojects {
+rootProject.allprojects {
     repositories {
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven")
+        }
         google()
         mavenCentral()
     }
@@ -41,6 +44,10 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 23
     }
+}
+
+dependencies {
+    implementation("ru.rustore.sdk:pushclient:0.0.7")
 }

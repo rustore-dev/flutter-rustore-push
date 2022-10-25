@@ -1,6 +1,6 @@
-# rustore_push_example
+# rustorepush_example
 
-Demonstrates how to use the rustore_push plugin.
+Demonstrates how to use the rustorepush plugin.
 
 ## Getting Started
 

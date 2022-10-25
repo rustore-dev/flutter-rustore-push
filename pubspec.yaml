@@ -35,7 +35,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: ru.kovardin.rustore_push
+        package: ru.kovardin.rustorepush
         pluginClass: RustorePushPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

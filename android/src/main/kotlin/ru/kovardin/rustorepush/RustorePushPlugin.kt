@@ -1,4 +1,4 @@
-package ru.kovardin.rustore_push
+package ru.kovardin.rustorepush
 
 import androidx.annotation.NonNull
 
@@ -17,7 +17,7 @@ class RustorePushPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "rustore_push")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "rustorepush")
     channel.setMethodCallHandler(this)
   }
 

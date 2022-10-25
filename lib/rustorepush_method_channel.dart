@@ -7,7 +7,7 @@ import 'rustorepush_platform_interface.dart';
 class MethodChannelRustorePush extends RustorePushPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('rustore_push');
+  final methodChannel = const MethodChannel('rustorepush');
 
   @override
   Future<String?> getPlatformVersion() async {
