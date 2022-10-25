@@ -1,0 +1,14 @@
+POST https://vkpns.rustore.ru/v1/projects/myproject-b5ae1/messages:send HTTP/2
+Content-Type: application/json
+Authorization: Bearer cBFCn...
+
+{
+   "message":{
+      "token":"bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...",
+      "notification":{
+        "body":"This is an notification message!",
+        "title":"Message",
+        "image":"https://image-hosting.org/284239234.jpeg"
+      }
+   }
+}

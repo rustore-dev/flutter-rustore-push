@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rustorepush/rustorepush.dart';
-import 'package:rustorepush/rustorepush_platform_interface.dart';
-import 'package:rustorepush/rustorepush_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockRustorePushPlatform

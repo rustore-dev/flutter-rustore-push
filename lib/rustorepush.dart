@@ -1,8 +1,9 @@
+import 'package:rustorepush/pigeons/rustore.dart';
 
-import 'rustorepush_platform_interface.dart';
+class RustorePushClient {
+  var _api = PushClient();
 
-class RustorePush {
-  Future<String?> getPlatformVersion() {
-    return RustorePushPlatform.instance.getPlatformVersion();
+  void initialize(){
+    _api.initialize();
   }
 }
