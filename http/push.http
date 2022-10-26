@@ -4,7 +4,7 @@ Authorization: Bearer cBFCn...
 
 {
    "message":{
-      "token":"bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...",
+      "token":"cBFCn-fLIdRA2qXRuCnNq-49GYHFpsK5Y62lQX4QUIFUxSVqQ68vkCQh2YA-92jL",
       "notification":{
         "body":"This is an notification message!",
         "title":"Message",

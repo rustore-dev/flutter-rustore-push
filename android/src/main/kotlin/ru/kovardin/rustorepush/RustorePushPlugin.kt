@@ -1,7 +1,9 @@
 package ru.kovardin.rustorepush
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -14,40 +16,36 @@ import io.flutter.plugin.common.MethodChannel.Result
 import ru.kovardin.rustorepush.pigeons.Rustore
 
 /** RustorePushPlugin */
-class RustorePushPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+class RustorePushPlugin: FlutterPlugin {
   private lateinit var channel : MethodChannel
 
   private lateinit var context: Context
-  private lateinit var activity: Activity
+  private lateinit var application: Application
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     context = binding.applicationContext
+    while (context != null) {
+      Log.w("RustorePushPlugin", "Trying to resolve Application from Context: ${context.javaClass.name}")
+      application = context as Application
+      if (application != null) {
+        Log.i("", "Resolved Application from Context")
+        break
+      } else {
+        context = context.applicationContext
+      }
+    }
 
-    val rustore = RustorePushClient(context)
+    if (application == null) {
+      Log.e("RustorePushPlugin", "Fail to resolve Application from Context")
+    }
+
+//    Log.e("RustorePushPlugin", activity.localClassName)
+
+    val rustore = RustorePushClient(application)
     Rustore.PushClient.setup(binding.binaryMessenger, rustore)
-  }
-
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
-  }
-
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onDetachedFromActivityForConfigChanges() {
-    TODO("Not yet implemented")
-  }
-
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
   }
 }
