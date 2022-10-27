@@ -14,13 +14,23 @@ class RustorePushClient(private val app: Application) : Rustore.PushClient {
     var callback: Rustore.Result<String>? = null
 
     override fun initialize(project: String, result: Rustore.Result<String>?) {
-        this.callback = callback
         RustorePushService.client = this
         RuStorePushClient.init(
             application = app,
             projectId = project,
             logger = DefaultLogger()
         )
+
+        GlobalScope.launch {
+            Log.i("RustorePushClient", RuStorePushClient.getToken().toString())
+
+            val token = RuStorePushClient.getToken()
+            if (token != null) {
+                result?.success(token)
+            } else {
+               callback = result
+            }
+        }
     }
 
     fun onNewToken(token: String) {
