@@ -5,6 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:rustorepush/rustorepush.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final push = RustorePushClient();
+  push.initialize("").then((value) {
+    print("token ${value}");
+  });
+
   runApp(const MyApp());
 }
 
@@ -21,18 +28,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPush();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPush() async {
-    push.initialize();
-
-    if (!mounted) return;
-
-    setState(() {
-      // _platformVersion = platformVersion;
-    });
   }
 
   @override

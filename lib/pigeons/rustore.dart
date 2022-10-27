@@ -17,11 +17,11 @@ class PushClient {
 
   static const MessageCodec<Object?> codec = StandardMessageCodec();
 
-  Future<void> initialize() async {
+  Future<String> initialize(String arg_project) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PushClient.initialize', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
+        await channel.send(<Object?>[arg_project]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -34,8 +34,13 @@ class PushClient {
         message: error['message'] as String?,
         details: error['details'],
       );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return;
+      return (replyMap['result'] as String?)!;
     }
   }
 }

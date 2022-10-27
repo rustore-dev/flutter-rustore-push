@@ -2,5 +2,6 @@ import 'package:pigeon/pigeon.dart';
 
 @HostApi()
 abstract class PushClient {
-  void initialize();
+  @async
+  String initialize(String project);
 }

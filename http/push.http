@@ -1,10 +1,10 @@
-POST https://vkpns.rustore.ru/v1/projects/myproject-b5ae1/messages:send HTTP/2
+POST https://vkpns.rustore.ru/v1/projects/OClMKCDhoBtj3kZ5YAkjmF1BBytBtWEX/messages:send HTTP/2
 Content-Type: application/json
-Authorization: Bearer cBFCn...
+Authorization: Bearer {{bearer}}
 
 {
    "message":{
-      "token":"cBFCn-fLIdRA2qXRuCnNq-49GYHFpsK5Y62lQX4QUIFUxSVqQ68vkCQh2YA-92jL",
+      "token": "{{token}}",
       "notification":{
         "body":"This is an notification message!",
         "title":"Message",

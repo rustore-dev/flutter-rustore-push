@@ -22,9 +22,14 @@ import java.util.HashMap;
 /**Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
 public class Rustore {
+
+  public interface Result<T> {
+    void success(T result);
+    void error(Throwable error);
+  }
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
   public interface PushClient {
-    void initialize();
+    void initialize(@NonNull String project, Result<String> result);
 
     /** The codec used by PushClient. */
     static MessageCodec<Object> getCodec() {
@@ -38,13 +43,29 @@ public class Rustore {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
-              api.initialize();
-              wrapped.put("result", null);
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              assert args != null;
+              String projectArg = (String)args.get(0);
+              if (projectArg == null) {
+                throw new NullPointerException("projectArg unexpectedly null.");
+              }
+              Result<String> resultCallback = new Result<String>() {
+                public void success(String result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.initialize(projectArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
             }
-            reply.reply(wrapped);
           });
         } else {
           channel.setMessageHandler(null);

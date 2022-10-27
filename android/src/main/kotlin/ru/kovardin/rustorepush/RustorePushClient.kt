@@ -9,24 +9,27 @@ import ru.rustore.sdk.pushclient.RuStorePushClient
 import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
 class RustorePushClient(private val app: Application) : Rustore.PushClient {
+    var token: String = ""
+    var errors: String = ""
+    var callback: Rustore.Result<String>? = null
 
-    override fun initialize() {
-
-        Log.d("RustorePushClient", app.packageName)
-
+    override fun initialize(project: String, result: Rustore.Result<String>?) {
+        this.callback = callback
+        RustorePushService.client = this
         RuStorePushClient.init(
             application = app,
-            projectId = "OClMKCDhoBtj3kZ5YAkjmF1BBytBtWEXL",
+            projectId = project,
             logger = DefaultLogger()
         )
+    }
 
+    fun onNewToken(token: String) {
+        this.token = token
 
-        GlobalScope.launch {
+        callback?.success(token)
+    }
 
-            val token = RuStorePushClient.getToken()
-
-            Log.d("RustorePushClient", token.toString())
-        }
-
+    fun onErrors(errors: String) {
+        this.errors = errors
     }
 }

@@ -5,13 +5,19 @@ import ru.rustore.sdk.pushclient.messaging.exception.RuStorePushClientException
 import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 
 class RustorePushService: RuStoreMessagingService() {
+    companion object {
+        var client: RustorePushClient? = null
+    }
+
     override fun onNewToken(token: String) {
-        println(token)
         Log.e("onNewToken", token)
+
+        client?.onNewToken(token)
     }
 
     override fun onError(errors: List<RuStorePushClientException>) {
-//        println(token)
         Log.e("onError", errors.toString())
+
+        client?.onErrors(errors.toString())
     }
 }
