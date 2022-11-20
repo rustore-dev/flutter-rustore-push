@@ -7,6 +7,124 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List, Uint8List;
 import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 
+class Message {
+  Message({
+    this.messageId,
+    required this.priority,
+    required this.ttl,
+    required this.collapseKey,
+    required this.data,
+    required this.notification,
+  });
+
+  String? messageId;
+  int priority;
+  int ttl;
+  String collapseKey;
+  Map<String?, String?> data;
+  Notification notification;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['messageId'] = messageId;
+    pigeonMap['priority'] = priority;
+    pigeonMap['ttl'] = ttl;
+    pigeonMap['collapseKey'] = collapseKey;
+    pigeonMap['data'] = data;
+    pigeonMap['notification'] = notification.encode();
+    return pigeonMap;
+  }
+
+  static Message decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return Message(
+      messageId: pigeonMap['messageId'] as String?,
+      priority: pigeonMap['priority']! as int,
+      ttl: pigeonMap['ttl']! as int,
+      collapseKey: pigeonMap['collapseKey']! as String,
+      data: (pigeonMap['data'] as Map<Object?, Object?>?)!.cast<String?, String?>(),
+      notification: Notification.decode(pigeonMap['notification']!)
+,
+    );
+  }
+}
+
+class Notification {
+  Notification({
+    this.title,
+    this.body,
+    this.channelId,
+    this.imageUrl,
+    this.color,
+    this.icon,
+    this.clickAction,
+  });
+
+  String? title;
+  String? body;
+  String? channelId;
+  String? imageUrl;
+  String? color;
+  String? icon;
+  String? clickAction;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['title'] = title;
+    pigeonMap['body'] = body;
+    pigeonMap['channelId'] = channelId;
+    pigeonMap['imageUrl'] = imageUrl;
+    pigeonMap['color'] = color;
+    pigeonMap['icon'] = icon;
+    pigeonMap['clickAction'] = clickAction;
+    return pigeonMap;
+  }
+
+  static Notification decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return Notification(
+      title: pigeonMap['title'] as String?,
+      body: pigeonMap['body'] as String?,
+      channelId: pigeonMap['channelId'] as String?,
+      imageUrl: pigeonMap['imageUrl'] as String?,
+      color: pigeonMap['color'] as String?,
+      icon: pigeonMap['icon'] as String?,
+      clickAction: pigeonMap['clickAction'] as String?,
+    );
+  }
+}
+
+class _PushClientCodec extends StandardMessageCodec{
+  const _PushClientCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is Message) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is Notification) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else 
+{
+      super.writeValue(buffer, value);
+    }
+  }
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:       
+        return Message.decode(readValue(buffer)!);
+      
+      case 129:       
+        return Notification.decode(readValue(buffer)!);
+      
+      default:      
+        return super.readValueOfType(type, buffer);
+      
+    }
+  }
+}
 
 class PushClient {
   /// Constructor for [PushClient].  The [binaryMessenger] named argument is
@@ -15,13 +133,116 @@ class PushClient {
   PushClient({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = StandardMessageCodec();
+  static const MessageCodec<Object?> codec = _PushClientCodec();
 
   Future<String> initialize(String arg_project) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PushClient.initialize', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_project]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as String?)!;
+    }
+  }
+
+  Future<String> onNewToken() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.PushClient.onNewToken', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as String?)!;
+    }
+  }
+
+  Future<Message> onMessageReceived() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.PushClient.onMessageReceived', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as Message?)!;
+    }
+  }
+
+  Future<void> onDeletedMessages() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.PushClient.onDeletedMessages', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<String> onError() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.PushClient.onError', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

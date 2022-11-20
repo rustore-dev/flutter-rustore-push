@@ -6,7 +6,7 @@ Authorization: Bearer {{bearer}}
    "message":{
       "token": "{{token}}",
       "notification":{
-        "body":"This is an notification message!",
+        "body":"This is an rustore notification2!",
         "title":"Message",
         "image":"https://image-hosting.org/284239234.jpeg"
       }

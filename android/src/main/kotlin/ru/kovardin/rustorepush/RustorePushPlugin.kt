@@ -1,51 +1,32 @@
 package ru.kovardin.rustorepush
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import ru.kovardin.rustorepush.pigeons.Rustore
+import ru.kovardin.rustorepush.pigeons.RustorePush
 
 /** RustorePushPlugin */
-class RustorePushPlugin: FlutterPlugin {
-  private lateinit var channel : MethodChannel
+class RustorePushPlugin : FlutterPlugin {
+    private lateinit var context: Context
+    private lateinit var application: Application
 
-  private lateinit var context: Context
-  private lateinit var application: Application
+    override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        context = binding.applicationContext
 
-  override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    context = binding.applicationContext
-    while (context != null) {
-      Log.w("RustorePushPlugin", "Trying to resolve Application from Context: ${context.javaClass.name}")
-      application = context as Application
-      if (application != null) {
-        Log.i("", "Resolved Application from Context")
-        break
-      } else {
-        context = context.applicationContext
-      }
+        Log.w(
+            "RustorePushPlugin",
+            "Trying to resolve Application from Context: ${context.javaClass.name}"
+        )
+        application = context as Application
+
+
+        val rustore = RustorePushClient(application)
+        RustorePush.PushClient.setup(binding.binaryMessenger, rustore)
     }
 
-    if (application == null) {
-      Log.e("RustorePushPlugin", "Fail to resolve Application from Context")
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     }
-
-//    Log.e("RustorePushPlugin", activity.localClassName)
-
-    val rustore = RustorePushClient(application)
-    Rustore.PushClient.setup(binding.binaryMessenger, rustore)
-  }
-
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
 }

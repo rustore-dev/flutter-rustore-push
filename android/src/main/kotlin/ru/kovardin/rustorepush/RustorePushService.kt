@@ -1,6 +1,7 @@
 package ru.kovardin.rustorepush
 
 import android.util.Log
+import com.vk.push.common.messaging.RemoteMessage
 import ru.rustore.sdk.pushclient.messaging.exception.RuStorePushClientException
 import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 
@@ -10,14 +11,23 @@ class RustorePushService: RuStoreMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        Log.e("onNewToken", token)
+        Log.e("RustorePushService", "onNewToken: $token")
 
-        client?.onNewToken(token)
+        client?.onNewTokenResult?.success(token)
+    }
+
+//    override fun onMessageReceived(message: RemoteMessage) {
+//    }
+
+    override fun onDeletedMessages() {
+        Log.e("RustorePushService","onDeletedMessages")
+
+        client?.onMessageDeleteResult?.success(null)
     }
 
     override fun onError(errors: List<RuStorePushClientException>) {
-        Log.e("onError", errors.toString())
+        Log.e("RustorePushService", "onError: $errors")
 
-        client?.onErrors(errors.toString())
+        client?.onErrorResult?.success(errors.toString())
     }
 }

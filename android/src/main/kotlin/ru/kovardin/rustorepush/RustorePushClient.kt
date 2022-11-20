@@ -2,18 +2,24 @@ package ru.kovardin.rustorepush
 
 import android.app.Application
 import android.util.Log
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import ru.kovardin.rustorepush.pigeons.Rustore
+import ru.kovardin.rustorepush.pigeons.RustorePush
+import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
 import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
-class RustorePushClient(private val app: Application) : Rustore.PushClient {
-    var token: String = ""
-    var errors: String = ""
-    var callback: Rustore.Result<String>? = null
+class RustorePushClient(private val app: Application) : RustorePush.PushClient {
+    var initializeResult: RustorePush.Result<String>? = null
+    var onNewTokenResult: RustorePush.Result<String>? = null
+    var onMessageReceivedResult: RustorePush.Result<RustorePush.Message>? = null
+    var onMessageDeleteResult: RustorePush.Result<Void>? = null
+    var onErrorResult: RustorePush.Result<String>? = null
 
-    override fun initialize(project: String, result: Rustore.Result<String>?) {
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override fun initialize(project: String, result: RustorePush.Result<String>?) {
         RustorePushService.client = this
         RuStorePushClient.init(
             application = app,
@@ -21,25 +27,44 @@ class RustorePushClient(private val app: Application) : Rustore.PushClient {
             logger = DefaultLogger()
         )
 
-        GlobalScope.launch {
-            Log.i("RustorePushClient", RuStorePushClient.getToken().toString())
+        initializeResult = result
 
-            val token = RuStorePushClient.getToken()
-            if (token != null) {
-                result?.success(token)
-            } else {
-               callback = result
-            }
+        GlobalScope.launch {
+            Log.i("RustorePushClient", "initialize")
+
+            RuStorePushClient.getToken().addOnCompleteListener(object : OnCompleteListener<String> {
+                override fun onFailure(throwable: Throwable) {
+                    initializeResult?.error(throwable)
+                }
+
+                override fun onSuccess(token: String) {
+                    initializeResult?.success(token)
+                }
+            })
         }
     }
 
-    fun onNewToken(token: String) {
-        this.token = token
+    override fun onNewToken(result: RustorePush.Result<String>) {
+        Log.d("RustorePushClient", "onNewToken")
 
-        callback?.success(token)
+        onNewTokenResult = result
     }
 
-    fun onErrors(errors: String) {
-        this.errors = errors
+    override fun onMessageReceived(result: RustorePush.Result<RustorePush.Message>) {
+        Log.d("RustorePushClient", "onMessageReceived")
+
+        onMessageReceivedResult = result
+    }
+
+    override fun onDeletedMessages(result: RustorePush.Result<Void>) {
+        Log.d("RustorePushClient", "onDeletedMessages")
+
+        onMessageDeleteResult = result
+    }
+
+    override fun onError(result: RustorePush.Result<String>) {
+        Log.d("RustorePushClient", "onError")
+
+        onErrorResult = result
     }
 }
