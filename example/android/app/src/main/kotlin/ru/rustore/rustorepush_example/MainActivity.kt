@@ -1,4 +1,4 @@
-package ru.kovardin.rustorepush_example
+package ru.rustore.rustorepush_example
 
 import io.flutter.embedding.android.FlutterActivity
 

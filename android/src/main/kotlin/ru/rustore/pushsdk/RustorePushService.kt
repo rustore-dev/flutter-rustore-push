@@ -1,4 +1,4 @@
-package ru.kovardin.rustorepush
+package ru.rustore.pushsdk
 
 import android.util.Log
 import com.vk.push.common.messaging.RemoteMessage

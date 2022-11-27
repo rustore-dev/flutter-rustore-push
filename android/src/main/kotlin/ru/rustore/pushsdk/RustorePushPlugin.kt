@@ -1,4 +1,4 @@
-package ru.kovardin.rustorepush
+package ru.rustore.pushsdk
 
 import android.app.Application
 import android.content.Context
@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import ru.kovardin.rustorepush.pigeons.RustorePush
+import ru.rustore.pushsdk.pigeons.RustorePush
 
 /** RustorePushPlugin */
 class RustorePushPlugin : FlutterPlugin {

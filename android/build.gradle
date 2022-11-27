@@ -1,4 +1,4 @@
-group 'ru.kovardin.rustorepush'
+group 'ru.rustore.pushsdk'
 version '1.0-SNAPSHOT'
 
 buildscript {

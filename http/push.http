@@ -1,4 +1,4 @@
-POST https://vkpns.rustore.ru/v1/projects/OClMKCDhoBtj3kZ5YAkjmF1BBytBtWEX/messages:send HTTP/2
+POST https://vkpns.rustore.ru/v1/projects/{{project}}/messages:send HTTP/2
 Content-Type: application/json
 Authorization: Bearer {{bearer}}
 
@@ -6,7 +6,7 @@ Authorization: Bearer {{bearer}}
    "message":{
       "token": "{{token}}",
       "notification":{
-        "body":"This is an rustore notification2!",
+        "body":"This is an rustore notification!",
         "title":"Message",
         "image":"https://image-hosting.org/284239234.jpeg"
       }

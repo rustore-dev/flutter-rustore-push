@@ -1,11 +1,11 @@
-package ru.kovardin.rustorepush
+package ru.rustore.pushsdk
 
 import android.app.Application
 import android.util.Log
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import ru.kovardin.rustorepush.pigeons.RustorePush
+import ru.rustore.pushsdk.pigeons.RustorePush
 import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
 import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
