@@ -1,8 +1,8 @@
 package ru.rustore.pushsdk
 
 import android.util.Log
-import com.vk.push.common.messaging.RemoteMessage
 import ru.rustore.sdk.pushclient.messaging.exception.RuStorePushClientException
+import ru.rustore.sdk.pushclient.messaging.model.RemoteMessage
 import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 
 class RustorePushService: RuStoreMessagingService() {
@@ -16,8 +16,9 @@ class RustorePushService: RuStoreMessagingService() {
         client?.onNewTokenResult?.success(token)
     }
 
-//    override fun onMessageReceived(message: RemoteMessage) {
-//    }
+    override fun onMessageReceived(message: RemoteMessage) {
+
+    }
 
     override fun onDeletedMessages() {
         Log.e("RustorePushService","onDeletedMessages")
