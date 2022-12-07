@@ -1,13 +1,13 @@
-package ru.rustore.pushsdk
+package ru.rustore.flutter_rustore_push
 
 import android.util.Log
 import ru.rustore.sdk.pushclient.messaging.exception.RuStorePushClientException
 import ru.rustore.sdk.pushclient.messaging.model.RemoteMessage
 import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 
-class RustorePushService: RuStoreMessagingService() {
+class FlutterRustorePushService: RuStoreMessagingService() {
     companion object {
-        var client: RustorePushClient? = null
+        var client: FlutterRustorePushClient? = null
     }
 
     override fun onNewToken(token: String) {

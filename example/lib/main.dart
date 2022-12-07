@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:rustorepush/rustorepush.dart';
+import 'package:flutter_rustore_push/flutter_rustore_push.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,9 +33,9 @@ class _MyAppState extends State<MyApp> {
         token = value;
       });
     }, onError: (value) {
-      print("initialize error: ${value}");
+      print("initialize error: ${value.toString()}");
       setState(() {
-        error = value;
+        error = value.toString();
       });
     });
 
@@ -72,12 +69,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('Test push'),
-              const SizedBox(height: 24),
-              Text('token: ${token}'),
-              Text('error: ${error}')
-            ],
+            children: [const Text('Test push'), const SizedBox(height: 24), Text('token: ${token}'), Text('error: ${error}')],
           ),
         ),
       ),

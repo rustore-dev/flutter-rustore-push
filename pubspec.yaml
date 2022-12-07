@@ -1,5 +1,5 @@
-name: rustorepush
-description: Flutter RuStore push SDK.
+name: flutter_rustore_push
+description: Flutter RuStore Push SDK.
 version: 0.0.1
 homepage:
 
@@ -36,8 +36,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: ru.rustore.pushsdk
-        pluginClass: RustorePushPlugin
+        package: ru.rustore.flutter_rustore_push
+        pluginClass: FlutterRustorePushPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

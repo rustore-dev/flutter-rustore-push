@@ -94,8 +94,8 @@ class Notification {
   }
 }
 
-class _PushClientCodec extends StandardMessageCodec{
-  const _PushClientCodec();
+class _ClientCodec extends StandardMessageCodec{
+  const _ClientCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is Message) {
@@ -126,18 +126,18 @@ class _PushClientCodec extends StandardMessageCodec{
   }
 }
 
-class PushClient {
-  /// Constructor for [PushClient].  The [binaryMessenger] named argument is
+class Client {
+  /// Constructor for [Client].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  PushClient({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  Client({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _PushClientCodec();
+  static const MessageCodec<Object?> codec = _ClientCodec();
 
   Future<String> initialize(String arg_project) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PushClient.initialize', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Client.initialize', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_project]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -164,7 +164,7 @@ class PushClient {
 
   Future<String> onNewToken() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PushClient.onNewToken', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Client.onNewToken', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -191,7 +191,7 @@ class PushClient {
 
   Future<Message> onMessageReceived() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PushClient.onMessageReceived', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Client.onMessageReceived', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -218,7 +218,7 @@ class PushClient {
 
   Future<void> onDeletedMessages() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PushClient.onDeletedMessages', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Client.onDeletedMessages', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -240,7 +240,7 @@ class PushClient {
 
   Future<String> onError() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.PushClient.onError', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.Client.onError', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {

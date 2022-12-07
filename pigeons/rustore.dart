@@ -21,7 +21,7 @@ class Notification {
 }
 
 @HostApi()
-abstract class PushClient {
+abstract class Client {
   @async
   String initialize(String project);
 

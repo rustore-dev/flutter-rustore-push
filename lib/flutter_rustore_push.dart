@@ -1,7 +1,7 @@
-import 'package:rustorepush/pigeons/rustore.dart';
+import 'package:flutter_rustore_push/pigeons/rustore.dart';
 
 class RustorePushClient {
-  var _api = PushClient();
+  final _api = Client();
 
   Future<String> initialize(String project) async {
     return _api.initialize(project);

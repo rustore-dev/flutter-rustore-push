@@ -1,4 +1,4 @@
-group 'ru.rustore.pushsdk'
+group 'ru.rustore.flutter_rustore_push'
 version '1.0-SNAPSHOT'
 
 buildscript {

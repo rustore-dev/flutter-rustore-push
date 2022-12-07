@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.rustore.rustorepush_example">
+    package="ru.rustore.flutter_rustore_push_example">
    <application
-        android:label="rustorepush_example"
+        android:label="flutter_rustore_push_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name="ru.rustore.rustorepush_example.MainActivity"
+            android:name="ru.rustore.flutter_rustore_push_example.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

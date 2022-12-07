@@ -1,27 +1,39 @@
+import 'package:flutter_rustore_push/pigeons/rustore.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rustorepush/rustorepush.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockRustorePushPlatform
-    with MockPlatformInterfaceMixin
-    implements RustorePushPlatform {
+class MockClientPlatform with MockPlatformInterfaceMixin implements Client {
+  @override
+  Future<String> initialize(String arg_project) {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
 
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  Future<void> onDeletedMessages() {
+    // TODO: implement onDeletedMessages
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> onError() {
+    // TODO: implement onError
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Message> onMessageReceived() {
+    // TODO: implement onMessageReceived
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> onNewToken() {
+    // TODO: implement onNewToken
+    throw UnimplementedError();
+  }
 }
 
 void main() {
-  final RustorePushPlatform initialPlatform = RustorePushPlatform.instance;
-
-  test('$MethodChannelRustorePush is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelRustorePush>());
-  });
-
-  test('getPlatformVersion', () async {
-    RustorePush rustorePushPlugin = RustorePush();
-    MockRustorePushPlatform fakePlatform = MockRustorePushPlatform();
-    RustorePushPlatform.instance = fakePlatform;
-
-    expect(await rustorePushPlugin.getPlatformVersion(), '42');
-  });
+  test('getPlatformVersion', () async {});
 }
