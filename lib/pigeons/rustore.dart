@@ -12,7 +12,7 @@ class Message {
     this.messageId,
     required this.priority,
     required this.ttl,
-    required this.collapseKey,
+    this.collapseKey,
     required this.data,
     this.notification,
   });
@@ -20,7 +20,7 @@ class Message {
   String? messageId;
   int priority;
   int ttl;
-  String collapseKey;
+  String? collapseKey;
   Map<String?, String?> data;
   Notification? notification;
 
@@ -41,7 +41,7 @@ class Message {
       messageId: pigeonMap['messageId'] as String?,
       priority: pigeonMap['priority']! as int,
       ttl: pigeonMap['ttl']! as int,
-      collapseKey: pigeonMap['collapseKey']! as String,
+      collapseKey: pigeonMap['collapseKey'] as String?,
       data: (pigeonMap['data'] as Map<Object?, Object?>?)!.cast<String?, String?>(),
       notification: pigeonMap['notification'] != null
           ? Notification.decode(pigeonMap['notification']!)

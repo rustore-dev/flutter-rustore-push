@@ -15,9 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String token = "";
-  String error = "";
-  String message = "";
   List<String> stack = [];
 
   @override
@@ -35,7 +32,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        token = value;
       });
     }, onError: (err) {
       final item = "initialize error: ${err}";
@@ -44,7 +40,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        error = err.toString();
       });
     });
 
@@ -63,7 +58,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        error = err.toString();
       });
     });
 
@@ -74,7 +68,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        token = value;
       });
     }, onError: (err) {
       final item = "on new token err: ${err}";
@@ -83,18 +76,16 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        error = err.toString();
       });
     });
 
     RustorePushClient.onMessageReceived().then((value) {
-      final item = "on message received success: ${value}";
+      final item = "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
 
       print(item);
 
       setState(() {
         stack.add(item);
-        message = value.toString();
       });
     }, onError: (err) {
       final item = "on message received error: ${err}";
@@ -103,7 +94,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        error = err.toString();
       });
     });
 
@@ -114,7 +104,6 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         stack.add(item);
-        error = value;
       });
     });
   }
@@ -141,7 +130,6 @@ class _MyAppState extends State<MyApp> {
 
                       setState(() {
                         stack.add(item);
-                        token = value.toString();
                       });
                     }, onError: (err) {
                       final item = "get token error: ${err}";
@@ -150,7 +138,6 @@ class _MyAppState extends State<MyApp> {
 
                       setState(() {
                         stack.add(item);
-                        error = err.toString();
                       });
                     });
                   },
@@ -173,7 +160,6 @@ class _MyAppState extends State<MyApp> {
 
                       setState(() {
                         stack.add(item);
-                        error = err.toString();
                       });
                     });
                   },

@@ -4,7 +4,7 @@ class Message {
   String? messageId;
   late int priority;
   late int ttl;
-  late String collapseKey;
+  late String? collapseKey;
   late Map<String?, String?> data;
   late Notification? notification;
 }

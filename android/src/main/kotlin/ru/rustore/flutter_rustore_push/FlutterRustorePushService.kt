@@ -23,6 +23,9 @@ class FlutterRustorePushService : RuStoreMessagingService() {
         val result = Rustore.Message.Builder()
         result.setMessageId(message.messageId)
         result.setData(message.data)
+        result.setPriority(message.priority.toLong())
+        result.setTtl(message.ttl.toLong())
+        result.setCollapseKey(message.collapseKey)
         result.setNotification(
             Rustore.Notification.Builder()
                 .setTitle(message.notification?.title)

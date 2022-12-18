@@ -49,12 +49,9 @@ public class Rustore {
       this.ttl = setterArg;
     }
 
-    private @NonNull String collapseKey;
-    public @NonNull String getCollapseKey() { return collapseKey; }
-    public void setCollapseKey(@NonNull String setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"collapseKey\" is null.");
-      }
+    private @Nullable String collapseKey;
+    public @Nullable String getCollapseKey() { return collapseKey; }
+    public void setCollapseKey(@Nullable String setterArg) {
       this.collapseKey = setterArg;
     }
 
@@ -92,7 +89,7 @@ public class Rustore {
         return this;
       }
       private @Nullable String collapseKey;
-      public @NonNull Builder setCollapseKey(@NonNull String setterArg) {
+      public @NonNull Builder setCollapseKey(@Nullable String setterArg) {
         this.collapseKey = setterArg;
         return this;
       }
