@@ -6,9 +6,8 @@ class Message {
   late int ttl;
   late String collapseKey;
   late Map<String?, String?> data;
-  late Notification notification;
+  late Notification? notification;
 }
-
 
 class Notification {
   String? title;
@@ -23,6 +22,9 @@ class Notification {
 @HostApi()
 abstract class Client {
   @async
+  bool available();
+
+  @async
   String initialize(String project);
 
   @async
@@ -36,4 +38,10 @@ abstract class Client {
 
   @async
   String onError();
+
+  @async
+  String getToken();
+
+  @async
+  void deleteToken();
 }

@@ -16,5 +16,5 @@ tasks:
       - flutter pub run pigeon
         --input pigeons/rustore.dart
         --dart_out lib/pigeons/rustore.dart
-        --java_out ./android/src/main/kotlin/ru/rustore/pushsdk/pigeons/Rustore.java
-        --java_package "ru.rustore.pushsdk.pigeons"
+        --java_out ./android/src/main/kotlin/ru/rustore/flutter_rustore_push/pigeons/Rustore.java
+        --java_package "ru.rustore.flutter_rustore_push.pigeons"

@@ -1,25 +1,37 @@
 import 'package:flutter_rustore_push/pigeons/rustore.dart';
 
 class RustorePushClient {
-  final _api = Client();
+  static final _api = Client();
 
-  Future<String> initialize(String project) async {
+  static Future<bool> available() async {
+    return _api.available();
+  }
+
+  static Future<String> initialize(String project) async {
     return _api.initialize(project);
   }
 
-  Future<String> onNewToken() async {
+  static Future<String> onNewToken() async {
     return _api.onNewToken();
   }
 
-  Future<Message> onMessageReceived() async {
+  static Future<Message> onMessageReceived() async {
     return _api.onMessageReceived();
   }
 
-  Future<void> onDeletedMessages() async {
+  static Future<void> onDeletedMessages() async {
     return _api.onDeletedMessages();
   }
 
-  Future<String> onError() async {
+  static Future<String> onError() async {
     return _api.onError();
+  }
+
+  static Future<String> getToken() async {
+    return _api.getToken();
+  }
+
+  static Future<void> deleteToken() async {
+    return _api.deleteToken();
   }
 }
