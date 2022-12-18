@@ -12,7 +12,10 @@ import io.flutter.plugin.common.MessageCodec;
 import io.flutter.plugin.common.StandardMessageCodec;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -64,12 +67,9 @@ public class Rustore {
       this.data = setterArg;
     }
 
-    private @NonNull Notification notification;
-    public @NonNull Notification getNotification() { return notification; }
-    public void setNotification(@NonNull Notification setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"notification\" is null.");
-      }
+    private @Nullable Notification notification;
+    public @Nullable Notification getNotification() { return notification; }
+    public void setNotification(@Nullable Notification setterArg) {
       this.notification = setterArg;
     }
 
@@ -102,7 +102,7 @@ public class Rustore {
         return this;
       }
       private @Nullable Notification notification;
-      public @NonNull Builder setNotification(@NonNull Notification setterArg) {
+      public @NonNull Builder setNotification(@Nullable Notification setterArg) {
         this.notification = setterArg;
         return this;
       }
@@ -307,17 +307,49 @@ public class Rustore {
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
   public interface Client {
+    void available(Result<Boolean> result);
     void initialize(@NonNull String project, Result<String> result);
     void onNewToken(Result<String> result);
     void onMessageReceived(Result<Message> result);
     void onDeletedMessages(Result<Void> result);
     void onError(Result<String> result);
+    void getToken(Result<String> result);
+    void deleteToken(Result<Void> result);
 
     /** The codec used by Client. */
     static MessageCodec<Object> getCodec() {
       return       ClientCodec.INSTANCE;    }
     /**Sets up an instance of `Client` to handle messages through the `binaryMessenger`. */
     static void setup(BinaryMessenger binaryMessenger, Client api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Client.available", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              Result<Boolean> resultCallback = new Result<Boolean>() {
+                public void success(Boolean result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.available(resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Client.initialize", getCodec());
@@ -459,6 +491,64 @@ public class Rustore {
               };
 
               api.onError(resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Client.getToken", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              Result<String> resultCallback = new Result<String>() {
+                public void success(String result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.getToken(resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Client.deleteToken", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              Result<Void> resultCallback = new Result<Void>() {
+                public void success(Void result) {
+                  wrapped.put("result", null);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.deleteToken(resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

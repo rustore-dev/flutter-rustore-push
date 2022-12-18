@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.rustore.flutter_rustore_push_example">
    <application
         android:label="flutter_rustore_push_example"
@@ -30,5 +31,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <service
+           android:name="ru.rustore.flutter_rustore_push.FlutterRustorePushService"
+           android:exported="true"
+           tools:ignore="ExportedService">
+           <intent-filter>
+               <action android:name="ru.rustore.sdk.pushclient.MESSAGING_EVENT" />
+           </intent-filter>
+       </service>
     </application>
 </manifest>
