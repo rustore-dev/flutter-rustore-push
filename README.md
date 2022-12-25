@@ -8,3 +8,13 @@ Flutter RuStore push SDK для подключения пуш уведомлен
 - Приложение RuStore должно поддерживать функциональность пуш-уведомлений.
 - Приложению RuStore разрешён доступ к работе в фоновом режиме.
 - Пользователь должен быть авторизован в приложении RuStore.
+
+Для инициализации сервиса работы с пуш-уведомлениями необходимо добавить значение в values вашего android проекта.
+
+```
+<resources>
+    <string name="flutter_rustore_push_project" translatable="false">XXXXXXXXXXX</string>
+</resources>
+```
+
+flutter_rustore_push_project - идентификатор проекта пуш-уведомлений из консоли разработчика.

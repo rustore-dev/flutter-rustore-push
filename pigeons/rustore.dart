@@ -25,9 +25,6 @@ abstract class Client {
   bool available();
 
   @async
-  String initialize(String project);
-
-  @async
   String onNewToken();
 
   @async

@@ -7,6 +7,9 @@ import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import ru.rustore.flutter_rustore_billing.utils.Log
 import ru.rustore.flutter_rustore_push.pigeons.Rustore
+import ru.rustore.flutter_rustore_push.utils.Resource
+import ru.rustore.sdk.pushclient.RuStorePushClient
+import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
 /** RustorePushPlugin */
 class FlutterRustorePushPlugin : FlutterPlugin {
@@ -19,10 +22,13 @@ class FlutterRustorePushPlugin : FlutterPlugin {
         Log.d(
             "Trying to resolve Application from Context: ${context.javaClass.name}"
         )
+
         application = context as Application
-
-
+        
+        FlutterRustorePushService.initialization(application)
         val rustore = FlutterRustorePushClient(application)
+
+        FlutterRustorePushService.client = rustore
         Rustore.Client.setup(binding.binaryMessenger, rustore)
     }
 

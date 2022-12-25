@@ -1,18 +1,13 @@
 package ru.rustore.flutter_rustore_push
 
 import android.app.Application
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import ru.rustore.flutter_rustore_billing.utils.Log
 import ru.rustore.flutter_rustore_push.pigeons.Rustore
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
-import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
 class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
-    var initializeResult: Rustore.Result<String>? = null
     var onNewTokenResult: Rustore.Result<String>? = null
     var onMessageReceivedResult: Rustore.Result<Rustore.Message>? = null
     var onDeletedMessagesResult: Rustore.Result<Void>? = null
@@ -37,33 +32,6 @@ class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
                     result?.error(throwable)
                 }
             })
-    }
-
-
-    @OptIn(DelicateCoroutinesApi::class)
-    override fun initialize(project: String, result: Rustore.Result<String>?) {
-        FlutterRustorePushService.client = this
-        RuStorePushClient.init(
-            application = app,
-            projectId = project,
-            logger = DefaultLogger()
-        )
-
-        initializeResult = result
-
-        GlobalScope.launch {
-            Log.i("initialize")
-
-            RuStorePushClient.getToken().addOnCompleteListener(object : OnCompleteListener<String> {
-                override fun onFailure(throwable: Throwable) {
-                    initializeResult?.error(throwable)
-                }
-
-                override fun onSuccess(token: String) {
-                    initializeResult?.success(token)
-                }
-            })
-        }
     }
 
     override fun onNewToken(result: Rustore.Result<String>) {
@@ -91,6 +59,7 @@ class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
     }
 
     override fun getToken(result: Rustore.Result<String>?) {
+        Log.d("isInitialized ${RuStorePushClient.isInitialized}")
         RuStorePushClient.getToken().addOnCompleteListener(object : OnCompleteListener<String> {
             override fun onSuccess(token: String) {
                 result?.success(token)

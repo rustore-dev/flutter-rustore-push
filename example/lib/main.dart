@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rustore_push/flutter_rustore_push.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<String> stack = [];
+  String token = "";
 
   @override
   void initState() {
@@ -25,21 +27,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPush() {
-    RustorePushClient.initialize("jYqD02VNCyrXKvlyLv3sCwCPkjlFCvqy").then((value) {
-      final item = "initialize success: ${value}";
+    RustorePushClient.getToken().then((value) {
+      final item = "get token success: ${value}";
 
       print(item);
 
       setState(() {
         stack.add(item);
-      });
-    }, onError: (err) {
-      final item = "initialize error: ${err}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
+        token = value;
       });
     });
 
@@ -61,15 +56,16 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
-    RustorePushClient.onNewToken().then((value) {
+    RustorePushClient.onNewToken((value) {
       final item = "on new token success: ${value}";
 
       print(item);
 
       setState(() {
         stack.add(item);
+        token = value;
       });
-    }, onError: (err) {
+    }, error: (err) {
       final item = "on new token err: ${err}";
 
       print(item);
@@ -79,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
-    RustorePushClient.onMessageReceived().then((value) {
+    RustorePushClient.onMessageReceived((value) {
       final item = "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
 
       print(item);
@@ -87,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         stack.add(item);
       });
-    }, onError: (err) {
+    }, error: (err) {
       final item = "on message received error: ${err}";
 
       print(item);
@@ -97,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
-    RustorePushClient.onError().then((value) {
+    RustorePushClient.onError((value) {
       final item = "on error: ${value}";
 
       print(item);
@@ -105,6 +101,37 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         stack.add(item);
       });
+    });
+  }
+
+  var project = "jYqD02VNCyrXKvlyLv3sCwCPkjlFCvqy";
+  var bearer = "kVmEIcP93JXJzO-GFFn9MZ0JSqwuRSfzfNA5XOF130PwI8htgHSxyHZ0Pn3b00ea";
+
+  void send(String token) {
+    final body = """{
+   "message":{
+      "token": "${token}",
+      "notification":{
+        "body":"This is an rustore notification!",
+        "title":"Message",
+        "image":"https://image-hosting.org/284239234.jpeg"
+      }
+   }
+}""";
+
+    print(body);
+
+    http
+        .post(
+      Uri.parse('https://vkpns.rustore.ru/v1/projects/${project}/messages:send'),
+      headers: {
+        'Authorization': 'Bearer ${bearer}',
+      },
+      body: body,
+    )
+        .then((resp) {
+      print(resp.statusCode);
+      print(resp.body);
     });
   }
 
@@ -130,6 +157,7 @@ class _MyAppState extends State<MyApp> {
 
                       setState(() {
                         stack.add(item);
+                        token = value;
                       });
                     }, onError: (err) {
                       final item = "get token error: ${err}";
@@ -152,6 +180,7 @@ class _MyAppState extends State<MyApp> {
 
                       setState(() {
                         stack.add(item);
+                        token = "";
                       });
                     }, onError: (err) {
                       final item = "delete token error: ${err}";
@@ -164,6 +193,13 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                   child: const Text("Delete token"),
+                ),
+                Text("token: ${token}"),
+                ElevatedButton(
+                  onPressed: () {
+                    send(token);
+                  },
+                  child: const Text("Send"),
                 ),
                 SizedBox(height: 8),
                 for (final item in stack) ...[

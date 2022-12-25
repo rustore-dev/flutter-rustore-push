@@ -1,7 +1,11 @@
 package ru.rustore.flutter_rustore_push
 
+import android.app.Application
 import ru.rustore.flutter_rustore_billing.utils.Log
 import ru.rustore.flutter_rustore_push.pigeons.Rustore
+import ru.rustore.flutter_rustore_push.utils.Resource
+import ru.rustore.sdk.pushclient.RuStorePushClient
+import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 import ru.rustore.sdk.pushclient.messaging.exception.RuStorePushClientException
 import ru.rustore.sdk.pushclient.messaging.model.RemoteMessage
 import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
@@ -9,6 +13,27 @@ import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 class FlutterRustorePushService : RuStoreMessagingService() {
     companion object {
         var client: FlutterRustorePushClient? = null
+
+        fun initialization(app: Application) {
+            if (!RuStorePushClient.isInitialized) {
+                val project =
+                    Resource.getResourceFromContext(app, "flutter_rustore_push_project")
+
+                Log.d("project: ${project}")
+
+                RuStorePushClient.init(
+                    application = app,
+                    projectId = project ?: "",
+                    logger = DefaultLogger()
+                )
+            }
+        }
+    }
+
+    override fun onCreate() {
+        initialization(application)
+
+        super.onCreate()
     }
 
     override fun onNewToken(token: String) {

@@ -17,7 +17,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  http:
   flutter_rustore_push:
     # When depending on this package from a real application you should use:
     #   rustorepush: ^x.y.z

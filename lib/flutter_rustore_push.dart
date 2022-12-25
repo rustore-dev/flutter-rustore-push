@@ -1,5 +1,7 @@
 import 'package:flutter_rustore_push/pigeons/rustore.dart';
 
+typedef void Callback(dynamic value);
+
 class RustorePushClient {
   static final _api = Client();
 
@@ -7,27 +9,56 @@ class RustorePushClient {
     return _api.available();
   }
 
-  static Future<String> initialize(String project) async {
-    return _api.initialize(project);
+  static onNewToken(Callback success, {Callback? error}) async {
+    try {
+      var resp = await _api.onNewToken();
+      success(resp);
+    } catch (err) {
+      if (error != null) {
+        error(err);
+      }
+    }
+    onNewToken(success, error: error);
   }
 
-  static Future<String> onNewToken() async {
-    return _api.onNewToken();
+  static onMessageReceived(Callback success, {Callback? error}) async {
+    try {
+      var resp = await _api.onMessageReceived();
+      success(resp);
+    } catch (err) {
+      if (error != null) {
+        error(err);
+      }
+    }
+    onMessageReceived(success, error: error);
   }
 
-  static Future<Message> onMessageReceived() async {
-    return _api.onMessageReceived();
+  static onDeletedMessages(Callback success, {Callback? error}) async {
+    try {
+      await _api.onDeletedMessages();
+      success(null);
+    } catch (err) {
+      if (error != null) {
+        error(err);
+      }
+    }
+    onDeletedMessages(success, error: error);
   }
 
-  static Future<void> onDeletedMessages() async {
-    return _api.onDeletedMessages();
-  }
-
-  static Future<String> onError() async {
-    return _api.onError();
+  static onError(Function success, {Function? error}) async {
+    try {
+      var resp = await _api.onError();
+      success(resp);
+    } catch (err) {
+      if (error != null) {
+        error(err);
+      }
+    }
+    onError(success, error: error);
   }
 
   static Future<String> getToken() async {
+    await Future.delayed(Duration(seconds: 1));
     return _api.getToken();
   }
 

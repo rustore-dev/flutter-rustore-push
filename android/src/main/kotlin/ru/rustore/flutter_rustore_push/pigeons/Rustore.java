@@ -305,7 +305,6 @@ public class Rustore {
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
   public interface Client {
     void available(Result<Boolean> result);
-    void initialize(@NonNull String project, Result<String> result);
     void onNewToken(Result<String> result);
     void onMessageReceived(Result<Message> result);
     void onDeletedMessages(Result<Void> result);
@@ -337,41 +336,6 @@ public class Rustore {
               };
 
               api.available(resultCallback);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-              reply.reply(wrapped);
-            }
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Client.initialize", getCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              ArrayList<Object> args = (ArrayList<Object>)message;
-              assert args != null;
-              String projectArg = (String)args.get(0);
-              if (projectArg == null) {
-                throw new NullPointerException("projectArg unexpectedly null.");
-              }
-              Result<String> resultCallback = new Result<String>() {
-                public void success(String result) {
-                  wrapped.put("result", result);
-                  reply.reply(wrapped);
-                }
-                public void error(Throwable error) {
-                  wrapped.put("error", wrapError(error));
-                  reply.reply(wrapped);
-                }
-              };
-
-              api.initialize(projectArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));
