@@ -1,15 +1,10 @@
-# rustorepush
+# flutter_rustore_push
 
-Flutter RuStore push SDK.
+Flutter RuStore push SDK для подключения пуш уведомлений.
 
+Для работы пуш-уведомлений необходимо соблюдение следующих условий:
 
-
-
-flutter pub run pigeon \
---input pigeons/rustore.dart \
---dart_out lib/pigeons/rustore.dart \
---java_out ./android/src/main/kotlin/ru/rustore/pushsdk/pigeons/RustorePush.java \
---java_package "ru.rustore.pushsdk.pigeons"
-
-
-adb install build/app/outputs/flutter-apk/app-release.apk
+- На устройстве пользователя должно быть установлено приложение RuStore.
+- Приложение RuStore должно поддерживать функциональность пуш-уведомлений.
+- Приложению RuStore разрешён доступ к работе в фоновом режиме.
+- Пользователь должен быть авторизован в приложении RuStore.
