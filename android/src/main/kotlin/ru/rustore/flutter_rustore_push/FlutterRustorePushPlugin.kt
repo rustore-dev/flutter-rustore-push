@@ -24,8 +24,7 @@ class FlutterRustorePushPlugin : FlutterPlugin {
         )
 
         application = context as Application
-        
-        FlutterRustorePushService.initialization(application)
+
         val rustore = FlutterRustorePushClient(application)
 
         FlutterRustorePushService.client = rustore

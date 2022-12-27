@@ -3,15 +3,33 @@ package ru.rustore.flutter_rustore_push
 import android.app.Application
 import ru.rustore.flutter_rustore_billing.utils.Log
 import ru.rustore.flutter_rustore_push.pigeons.Rustore
+import ru.rustore.flutter_rustore_push.utils.Resource
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
+import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
 class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
+    companion object {
+        fun initialization(app: Application) {
+            val project =
+                Resource.getResourceFromContext(app, "flutter_rustore_push_project")
+
+            Log.d("project: ${project}")
+
+            RuStorePushClient.init(
+                application = app,
+                projectId = project ?: "",
+                logger = DefaultLogger()
+            )
+        }
+    }
+
     var onNewTokenResult: Rustore.Result<String>? = null
     var onMessageReceivedResult: Rustore.Result<Rustore.Message>? = null
     var onDeletedMessagesResult: Rustore.Result<Void>? = null
     var onErrorResult: Rustore.Result<String>? = null
+
 
     override fun available(result: Rustore.Result<Boolean>?) {
         RuStorePushClient.checkPushAvailability(app)
@@ -35,7 +53,7 @@ class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
     }
 
     override fun onNewToken(result: Rustore.Result<String>) {
-        Log.d( "onNewToken")
+        Log.d("onNewToken")
 
         onNewTokenResult = result
     }
@@ -74,7 +92,7 @@ class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
     override fun deleteToken(result: Rustore.Result<Void>?) {
         RuStorePushClient.deleteToken().addOnCompleteListener(object : OnCompleteListener<Unit> {
             override fun onSuccess(response: Unit) {
-               result?.success(null)
+                result?.success(null)
             }
 
             override fun onFailure(throwable: Throwable) {

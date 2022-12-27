@@ -58,7 +58,6 @@ class RustorePushClient {
   }
 
   static Future<String> getToken() async {
-    await Future.delayed(Duration(seconds: 1));
     return _api.getToken();
   }
 
