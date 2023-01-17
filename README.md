@@ -2,6 +2,8 @@
 
 Flutter RuStore push SDK для подключения пуш уведомлений.
 
+Документация по настройки [RuStore SDK для подключения пуш-уведомлений](https://help.rustore.ru/rustore/for_developers/developer-documentation/RuStore-SDK-push-notifications).
+
 Для работы пуш-уведомлений необходимо соблюдение следующих условий:
 
 - На устройстве пользователя должно быть установлено приложение RuStore.
