@@ -30,3 +30,4 @@ migrate_working_dir/
 build/
 example/android/key.properties
 example/android/keystore.jks
+http/http-client.private.env.json
