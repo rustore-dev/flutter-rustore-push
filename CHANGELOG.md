@@ -1,11 +1,11 @@
-## 0.0.1
+## 0.0.3
 
-* Full RuStore push SDK support.
+* Added internal analytics.
 
 ## 0.0.2
 
 * Updated README and docs.
 
-## 0.0.3
+## 0.0.1
 
-* Added internal analytics.
+* Full RuStore push SDK support.
