@@ -5,4 +5,7 @@
 ## 0.0.2
 
 * Updated README and docs.
-git st
+
+## 0.0.3
+
+* Added internal analytics.

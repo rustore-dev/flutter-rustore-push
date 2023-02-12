@@ -4,6 +4,7 @@ import android.app.Application
 import ru.rustore.flutter_rustore_billing.utils.Log
 import ru.rustore.flutter_rustore_push.pigeons.Rustore
 import ru.rustore.flutter_rustore_push.utils.Resource
+import ru.rustore.sdk.core.config.SdkType
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
@@ -20,7 +21,8 @@ class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
             RuStorePushClient.init(
                 application = app,
                 projectId = project ?: "",
-                logger = DefaultLogger()
+                logger = DefaultLogger(),
+                internalConfig = mapOf("type" to SdkType.FLUTTER)
             )
         }
     }
