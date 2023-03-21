@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Updated RuStore push SDK to 0.1.5.
+
 ## 0.0.3
 
 * Added internal analytics.
