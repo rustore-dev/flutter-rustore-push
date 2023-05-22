@@ -28,7 +28,7 @@ class FlutterRustorePushPlugin : FlutterPlugin {
         val rustore = FlutterRustorePushClient(application)
 
         FlutterRustorePushService.client = rustore
-        Rustore.Client.setup(binding.binaryMessenger, rustore)
+        Rustore.RustorePush.setup(binding.binaryMessenger, rustore)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

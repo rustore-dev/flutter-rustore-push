@@ -3,7 +3,7 @@ import 'package:flutter_rustore_push/pigeons/rustore.dart';
 typedef void Callback(dynamic value);
 
 class RustorePushClient {
-  static final _api = Client();
+  static final _api = RustorePush();
 
   static Future<bool> available() async {
     return _api.available();

@@ -10,7 +10,7 @@ import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.sdk.pushclient.RuStorePushClient
 import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
 
-class FlutterRustorePushClient(private val app: Application) : Rustore.Client {
+class FlutterRustorePushClient(private val app: Application) : Rustore.RustorePush {
     companion object {
         fun initialization(app: Application) {
             val project =

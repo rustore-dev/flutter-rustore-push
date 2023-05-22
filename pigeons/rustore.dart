@@ -20,7 +20,7 @@ class Notification {
 }
 
 @HostApi()
-abstract class Client {
+abstract class RustorePush {
   @async
   bool available();
 
