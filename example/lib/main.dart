@@ -132,6 +132,7 @@ class _MyAppState extends State<MyApp> {
         .then((resp) {
       print(resp.statusCode);
       print(resp.body);
+      print(resp);
     });
   }
 

@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Updated RuStore push SDK to 1.0.0.
+
 ## 0.0.5
 
 * Updated RuStore push SDK to 0.1.9.
