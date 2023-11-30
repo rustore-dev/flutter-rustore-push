@@ -2,6 +2,8 @@
 
 Flutter RuStore push SDK для подключения пуш уведомлений.
 
+##[Документация RuStore](https://help.rustore.ru/rustore/for_developers/developer-documentation/sdk_push-notifications/flutter_push-notifications)
+
 ## Общее
 
 ## Пример реализации
