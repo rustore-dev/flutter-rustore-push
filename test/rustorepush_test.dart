@@ -1,8 +1,9 @@
-import 'package:flutter_rustore_push/pigeons/rustore.dart';
+import 'package:flutter_rustore_push/flutter_rustore_push.dart';
+import 'package:flutter_rustore_push/pigeons/rustore_push.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockClientPlatform with MockPlatformInterfaceMixin implements Client {
+class MockClientPlatform with MockPlatformInterfaceMixin implements RustorePushClient {
   @override
   Future<String> initialize(String arg_project) {
     // TODO: implement initialize

@@ -1,4 +1,4 @@
-package ru.rustore.flutter_rustore_billing.utils
+package ru.rustore.flutter_rustore_push.utils
 
 import android.util.Log as l
 

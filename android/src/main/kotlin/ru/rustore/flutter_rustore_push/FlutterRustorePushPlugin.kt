@@ -5,11 +5,9 @@ import android.content.Context
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import ru.rustore.flutter_rustore_billing.utils.Log
-import ru.rustore.flutter_rustore_push.pigeons.Rustore
-import ru.rustore.flutter_rustore_push.utils.Resource
-import ru.rustore.sdk.pushclient.RuStorePushClient
-import ru.rustore.sdk.pushclient.common.logger.DefaultLogger
+import ru.rustore.flutter_rustore_push.utils.Log
+import ru.rustore.flutter_rustore_push.pigeons.RuStorePush
+import ru.rustore.flutter_rustore_push.pigeons.RuStorePushCallbacks
 
 /** RustorePushPlugin */
 class FlutterRustorePushPlugin : FlutterPlugin {
@@ -26,9 +24,12 @@ class FlutterRustorePushPlugin : FlutterPlugin {
         application = context as Application
 
         val rustore = FlutterRustorePushClient(application)
+        val callbacks = RuStorePushCallbacks(binding.binaryMessenger)
 
-        FlutterRustorePushService.client = rustore
-        Rustore.RustorePush.setup(binding.binaryMessenger, rustore)
+        FlutterRustorePushService.client = callbacks
+
+        RuStorePush.setUp(binding.binaryMessenger, rustore)
+
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

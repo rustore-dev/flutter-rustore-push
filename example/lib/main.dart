@@ -27,6 +27,35 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPush() {
+    RustorePushClient.initialization("jYqD02VNCyrXKvlyLv3sCwCPkjlFCvqy", onNewToken: (value) {
+      final item = "on new token success: ${value}";
+
+      print(item);
+
+      setState(() {
+        stack.add(item);
+        token = value;
+      });
+    }, onMessageReceived: (value) {
+      final item = "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
+
+      print(item);
+
+      setState(() {
+        stack.add(item);
+      });
+    }, onDeletedMessages: () {
+      print("on delete message");
+    }, onError: (value) {
+      final item = "on error: ${value}";
+
+      print(item);
+
+      setState(() {
+        stack.add(item);
+      });
+    });
+
     RustorePushClient.getToken().then((value) {
       final item = "get token success: ${value}";
 
@@ -48,53 +77,6 @@ class _MyAppState extends State<MyApp> {
       });
     }, onError: (err) {
       final item = "available error: ${err}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
-      });
-    });
-
-    RustorePushClient.onNewToken((value) {
-      final item = "on new token success: ${value}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
-        token = value;
-      });
-    }, error: (err) {
-      final item = "on new token err: ${err}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
-      });
-    });
-
-    RustorePushClient.onMessageReceived((value) {
-      final item = "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
-      });
-    }, error: (err) {
-      final item = "on message received error: ${err}";
-
-      print(item);
-
-      setState(() {
-        stack.add(item);
-      });
-    });
-
-    RustorePushClient.onError((value) {
-      final item = "on error: ${value}";
 
       print(item);
 

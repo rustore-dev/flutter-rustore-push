@@ -1,3 +1,9 @@
+## 2.0.0
+
+* Updated pigeon plugin
+* Updated RuStore push SDK to 1.2.0.
+* Changed initialization logic
+
 ## 1.0.0
 
 * Updated RuStore push SDK to 1.0.0.
