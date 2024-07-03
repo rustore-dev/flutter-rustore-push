@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  var project = "N4WMBiriSKlIk0TjbBIqiIrWkT2i7OyC";
+  var project = "projectID";
   var serviceToken =
       "CubILkB-PWdxO8vWrFQ3WKjPKqSWQoeDMStTdU-T5PIOYKyMAt-0w3EWE2tjNOD7";
 

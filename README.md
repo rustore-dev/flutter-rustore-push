@@ -39,7 +39,7 @@ dependencies:
 ```kotlin
 <meta-data
     android:name="ru.rustore.sdk.pushclient.project_id"
-    android:value="i5UTx96jw6c1C9LvdlE4cdNrWHMNyRBt" />
+    android:value="your_project_id_from_rustore_console" />
 ```
 
 ## Настройки ProGuard
