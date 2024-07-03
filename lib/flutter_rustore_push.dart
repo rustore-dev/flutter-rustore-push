@@ -47,9 +47,7 @@ class RustorePushClient {
 
   static void setup() {}
 
-  static Future<void> initialization(
-    String project, {
-    ClientId? clientId,
+  static Future<void> attachCallbacks({
     Function? onDeletedMessages,
     Function? onError,
     Function? onMessageReceived,
@@ -61,8 +59,6 @@ class RustorePushClient {
       onMessageReceived: onMessageReceived,
       onNewToken: onNewToken,
     ));
-
-    _api.initialization(project, clientId);
 
     return;
   }
@@ -77,5 +73,13 @@ class RustorePushClient {
 
   static Future<void> deleteToken() async {
     return _api.deleteToken();
+  }
+
+  static Future<void> subscibeToTopic(String topicName) async {
+    return _api.subscribeToTopic(topicName);
+  }
+
+  static Future<void> unsubscribeFromTopic(String topicName) async {
+    return _api.unsubscribeFromTopic(topicName);
   }
 }

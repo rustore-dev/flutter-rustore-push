@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rustore_push/flutter_rustore_push.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPush() {
-    RustorePushClient.initialization("jYqD02VNCyrXKvlyLv3sCwCPkjlFCvqy", onNewToken: (value) {
+    RustorePushClient.attachCallbacks(onNewToken: (value) {
       final item = "on new token success: ${value}";
 
       print(item);
@@ -37,7 +38,8 @@ class _MyAppState extends State<MyApp> {
         token = value;
       });
     }, onMessageReceived: (value) {
-      final item = "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
+      final item =
+          "on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}";
 
       print(item);
 
@@ -86,13 +88,15 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  var project = "jYqD02VNCyrXKvlyLv3sCwCPkjlFCvqy";
-  var bearer = "kVmEIcP93JXJzO-GFFn9MZ0JSqwuRSfzfNA5XOF130PwI8htgHSxyHZ0Pn3b00ea";
+  var project = "N4WMBiriSKlIk0TjbBIqiIrWkT2i7OyC";
+  var serviceToken =
+      "CubILkB-PWdxO8vWrFQ3WKjPKqSWQoeDMStTdU-T5PIOYKyMAt-0w3EWE2tjNOD7";
 
-  void send(String token) {
-    final body = """{
+  void send(String deviceToken) async {
+    if (await Permission.notification.isGranted) {
+      final body = """{
    "message":{
-      "token": "${token}",
+      "token": "$deviceToken",
       "notification":{
         "body":"This is an rustore notification!",
         "title":"Message",
@@ -101,21 +105,25 @@ class _MyAppState extends State<MyApp> {
    }
 }""";
 
-    print(body);
+      print(body);
 
-    http
-        .post(
-      Uri.parse('https://vkpns.rustore.ru/v1/projects/${project}/messages:send'),
-      headers: {
-        'Authorization': 'Bearer ${bearer}',
-      },
-      body: body,
-    )
-        .then((resp) {
-      print(resp.statusCode);
-      print(resp.body);
-      print(resp);
-    });
+      http
+          .post(
+        Uri.parse(
+            'https://vkpns.rustore.ru/v1/projects/${project}/messages:send'),
+        headers: {
+          'Authorization': 'Bearer $serviceToken',
+        },
+        body: body,
+      )
+          .then((resp) {
+        print(resp.statusCode);
+        print(resp.body);
+        print(resp);
+      });
+    } else {
+      Permission.notification.request();
+    }
   }
 
   @override

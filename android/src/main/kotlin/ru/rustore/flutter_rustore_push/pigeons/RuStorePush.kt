@@ -119,86 +119,22 @@ data class Notification (
   }
 }
 
-/** Generated class from Pigeon that represents data sent in messages. */
-data class ClientId (
-  val type: String? = null,
-  val id: String? = null
-
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): ClientId {
-      val type = list[0] as String?
-      val id = list[1] as String?
-      return ClientId(type, id)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      type,
-      id,
-    )
-  }
-}
-
-@Suppress("UNCHECKED_CAST")
-private object RuStorePushCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ClientId.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
-    when (value) {
-      is ClientId -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface RuStorePush {
-  fun initialization(project: String, client: ClientId?, callback: (Result<Unit>) -> Unit)
   fun available(callback: (Result<Boolean>) -> Unit)
   fun getToken(callback: (Result<String>) -> Unit)
   fun deleteToken(callback: (Result<Unit>) -> Unit)
+  fun subscribeToTopic(topicName: String, callback: (Result<Unit>) -> Unit)
+  fun unsubscribeFromTopic(topicName: String, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by RuStorePush. */
     val codec: MessageCodec<Any?> by lazy {
-      RuStorePushCodec
+      StandardMessageCodec()
     }
     /** Sets up an instance of `RuStorePush` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
     fun setUp(binaryMessenger: BinaryMessenger, api: RuStorePush?) {
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_rustore_push.RuStorePush.initialization", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val projectArg = args[0] as String
-            val clientArg = args[1] as ClientId?
-            api.initialization(projectArg, clientArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_rustore_push.RuStorePush.available", codec)
         if (api != null) {
@@ -240,6 +176,44 @@ interface RuStorePush {
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.deleteToken() { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_rustore_push.RuStorePush.subscribeToTopic", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val topicNameArg = args[0] as String
+            api.subscribeToTopic(topicNameArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_rustore_push.RuStorePush.unsubscribeFromTopic", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val topicNameArg = args[0] as String
+            api.unsubscribeFromTopic(topicNameArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

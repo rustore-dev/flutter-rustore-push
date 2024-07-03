@@ -3,7 +3,8 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(PigeonOptions(
   dartOut: 'lib/pigeons/rustore_push.dart',
   dartOptions: DartOptions(),
-  kotlinOut: 'android/src/main/kotlin/ru/rustore/flutter_rustore_push/pigeons/RuStorePush.kt',
+  kotlinOut:
+      'android/src/main/kotlin/ru/rustore/flutter_rustore_push/pigeons/RuStorePush.kt',
   kotlinOptions: KotlinOptions(
     package: 'ru.rustore.flutter_rustore_push.pigeons',
   ),
@@ -36,9 +37,6 @@ class ClientId {
 @HostApi()
 abstract class RuStorePush {
   @async
-  void initialization(String project, ClientId? client);
-
-  @async
   bool available();
 
   @async
@@ -46,6 +44,12 @@ abstract class RuStorePush {
 
   @async
   void deleteToken();
+
+  @async
+  void subscribeToTopic(String topicName);
+
+  @async
+  void unsubscribeFromTopic(String topicName);
 }
 
 @FlutterApi()
