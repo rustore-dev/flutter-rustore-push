@@ -29,43 +29,17 @@ flutter pub add flutter_rustore_push
 
 ```
 dependencies:
-  flutter_rustore_push: ^2.0.0
+  flutter_rustore_push: ^6.0.0
 ```
 
-## Инициализация 
+## Инициализация
 
-Для инициализации сервиса пуш-уведомлений необходимо добавить значение в values вашего android проекта.
+Для инициализации сервиса пуш-уведомлений необходимо добавить значение в AndroidManifest вашего проекта.
 
-```
-<resources>
-    <string name="flutter_rustore_push_project" translatable="false">xxx</string>
-</resources>
-```
-
-Тут xxx - это идентификатор проекта. В консоле разработчика поле называется "ID проекта" на странице "Push-уведомления -> Проекты"
-
-Для запуска сервиса пуш-уведомлений необходимо добавить класс `Application` наследованный от `FlutterRustoreApplication`
-
-Пример как это сделать на Kotlin
-
-```
-package ru.rustore.flutter_rustore_push_example
- 
-import ru.rustore.flutter_rustore_push.FlutterRustoreApplication
- 
-open class Application: FlutterRustoreApplication() {
-}
-```
-
-И в AndroidManifest.xml необходимо указать этот класс
-
-```
-<application
-        android:label="flutter_rustore_push_example"
-        android:name=".Application"
-        android:icon="@mipmap/ic_launcher">
-        // ...
-</application>
+```kotlin
+<meta-data
+    android:name="ru.rustore.sdk.pushclient.project_id"
+    android:value="i5UTx96jw6c1C9LvdlE4cdNrWHMNyRBt" />
 ```
 
 ## Настройки ProGuard

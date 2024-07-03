@@ -1,3 +1,8 @@
+## 6.0.0
+
+* Updated RuStore push SDK to 6.0.0.
+* Changed initialization logic.
+
 ## 2.0.0
 
 * Updated pigeon plugin
