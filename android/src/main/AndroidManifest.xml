@@ -9,10 +9,6 @@
            <intent-filter>
                <action android:name="ru.rustore.sdk.pushclient.MESSAGING_EVENT" />
            </intent-filter>
-
        </service>
-        <meta-data
-            android:name="ru.rustore.sdk.pushclient.project_id"
-            android:value="your_project_id_from_rustore_console" />
     </application>
 </manifest>
