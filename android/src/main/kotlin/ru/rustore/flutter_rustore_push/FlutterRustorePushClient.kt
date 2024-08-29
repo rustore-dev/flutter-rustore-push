@@ -1,12 +1,11 @@
 package ru.rustore.flutter_rustore_push
 
-import android.app.Application
 import ru.rustore.flutter_rustore_push.pigeons.RuStorePush
 import ru.rustore.flutter_rustore_push.utils.Log
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.pushclient.RuStorePushClient
 
-class FlutterRustorePushClient(private val app: Application) : RuStorePush {
+class FlutterRustorePushClient : RuStorePush {
 
     override fun available(callback: (Result<Boolean>) -> Unit) {
         RuStorePushClient.checkPushAvailability()

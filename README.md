@@ -29,7 +29,7 @@ flutter pub add flutter_rustore_push
 
 ```
 dependencies:
-  flutter_rustore_push: ^6.1.0
+  flutter_rustore_push: ^6.1.1
 ```
 
 ## Инициализация

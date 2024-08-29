@@ -1,6 +1,5 @@
 package ru.rustore.flutter_rustore_push
 
-import android.app.Application
 import android.content.Context
 import androidx.annotation.NonNull
 
@@ -12,7 +11,6 @@ import ru.rustore.flutter_rustore_push.pigeons.RuStorePushCallbacks
 /** RustorePushPlugin */
 class FlutterRustorePushPlugin : FlutterPlugin {
     private lateinit var context: Context
-    private lateinit var application: Application
 
     override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         context = binding.applicationContext
@@ -21,9 +19,7 @@ class FlutterRustorePushPlugin : FlutterPlugin {
             "Trying to resolve Application from Context: ${context.javaClass.name}"
         )
 
-        application = context as Application
-
-        val rustore = FlutterRustorePushClient(application)
+        val rustore = FlutterRustorePushClient()
         val callbacks = RuStorePushCallbacks(binding.binaryMessenger)
 
         FlutterRustorePushService.client = callbacks
