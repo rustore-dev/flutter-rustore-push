@@ -1,3 +1,6 @@
+## 6.3.0
+* Updated RuStore push SDK to 6.3.0.
+
 ## 6.1.1
 
 * Fixed initialization via manifest
