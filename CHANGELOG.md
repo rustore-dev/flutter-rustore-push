@@ -1,3 +1,7 @@
+## 6.5.0
+* Updated RuStore push SDK to 6.5.0.
+* Add support gradle 8
+
 ## 6.3.1
 * Updated RuStore push SDK to 6.3.1.
 
