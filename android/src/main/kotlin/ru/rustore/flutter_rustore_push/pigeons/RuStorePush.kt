@@ -119,6 +119,38 @@ data class Notification (
   }
 }
 
+@Suppress("UNCHECKED_CAST")
+private object RuStorePushCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          Message.fromList(it)
+        }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          Notification.fromList(it)
+        }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
+    when (value) {
+      is Message -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is Notification -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface RuStorePush {
   fun available(callback: (Result<Boolean>) -> Unit)
@@ -126,11 +158,12 @@ interface RuStorePush {
   fun deleteToken(callback: (Result<Unit>) -> Unit)
   fun subscribeToTopic(topicName: String, callback: (Result<Unit>) -> Unit)
   fun unsubscribeFromTopic(topicName: String, callback: (Result<Unit>) -> Unit)
+  fun getInitialMessage(callback: (Result<Message?>) -> Unit)
 
   companion object {
     /** The codec used by RuStorePush. */
     val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
+      RuStorePushCodec
     }
     /** Sets up an instance of `RuStorePush` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
@@ -226,6 +259,24 @@ interface RuStorePush {
           channel.setMessageHandler(null)
         }
       }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_rustore_push.RuStorePush.getInitialMessage", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.getInitialMessage() { result: Result<Message?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
     }
   }
 }
@@ -240,6 +291,11 @@ private object RuStorePushCallbacksCodec : StandardMessageCodec() {
       }
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          Message.fromList(it)
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           Notification.fromList(it)
         }
       }
@@ -252,8 +308,12 @@ private object RuStorePushCallbacksCodec : StandardMessageCodec() {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is Notification -> {
+      is Message -> {
         stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is Notification -> {
+        stream.write(130)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -319,6 +379,21 @@ class RuStorePushCallbacks(private val binaryMessenger: BinaryMessenger) {
     val channelName = "dev.flutter.pigeon.flutter_rustore_push.RuStorePushCallbacks.error"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(errorArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      } 
+    }
+  }
+  fun messageOpenedApp(messageArg: Message?, callback: (Result<Unit>) -> Unit) {
+    val channelName = "dev.flutter.pigeon.flutter_rustore_push.RuStorePushCallbacks.messageOpenedApp"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(messageArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

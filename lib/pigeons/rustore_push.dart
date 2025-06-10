@@ -124,6 +124,34 @@ class Notification {
   }
 }
 
+class _RuStorePushCodec extends StandardMessageCodec {
+  const _RuStorePushCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is Message) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is Notification) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128: 
+        return Message.decode(readValue(buffer)!);
+      case 129: 
+        return Notification.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
+
 class RuStorePush {
   /// Constructor for [RuStorePush].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
@@ -132,7 +160,7 @@ class RuStorePush {
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
-  static const MessageCodec<Object?> pigeonChannelCodec = StandardMessageCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec = _RuStorePushCodec();
 
   Future<bool> available() async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.flutter_rustore_push.RuStorePush.available';
@@ -253,6 +281,28 @@ class RuStorePush {
       return;
     }
   }
+
+  Future<Message?> getInitialMessage() async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.flutter_rustore_push.RuStorePush.getInitialMessage';
+    final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as Message?);
+    }
+  }
 }
 
 class _RuStorePushCallbacksCodec extends StandardMessageCodec {
@@ -262,8 +312,11 @@ class _RuStorePushCallbacksCodec extends StandardMessageCodec {
     if (value is Message) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is Notification) {
+    } else if (value is Message) {
       buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else if (value is Notification) {
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -276,6 +329,8 @@ class _RuStorePushCallbacksCodec extends StandardMessageCodec {
       case 128: 
         return Message.decode(readValue(buffer)!);
       case 129: 
+        return Message.decode(readValue(buffer)!);
+      case 130: 
         return Notification.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -293,6 +348,8 @@ abstract class RuStorePushCallbacks {
   Future<void> deletedMessages();
 
   Future<void> error(String error);
+
+  Future<void> messageOpenedApp(Message? message);
 
   static void setup(RuStorePushCallbacks? api, {BinaryMessenger? binaryMessenger}) {
     {
@@ -380,6 +437,29 @@ abstract class RuStorePushCallbacks {
               'Argument for dev.flutter.pigeon.flutter_rustore_push.RuStorePushCallbacks.error was null, expected non-null String.');
           try {
             await api.error(arg_error!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.flutter_rustore_push.RuStorePushCallbacks.messageOpenedApp', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.flutter_rustore_push.RuStorePushCallbacks.messageOpenedApp was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final Message? arg_message = (args[0] as Message?);
+          try {
+            await api.messageOpenedApp(arg_message);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
