@@ -29,7 +29,7 @@ flutter pub add flutter_rustore_push
 
 ```
 dependencies:
-  flutter_rustore_push: ^6.5.0
+  flutter_rustore_push: ^6.10.0
 ```
 
 ## Инициализация
@@ -78,7 +78,7 @@ buildTypes {
 RustorePushClient.available().then((value) {
       print("available success: ${value}");
 }, onError: (err) {
-      print("available error: ${err}");
+    // handle error
 });
 ```
 
@@ -92,7 +92,7 @@ RustorePushClient.available().then((value) {
 RustorePushClient.getToken().then((value) {
       print("get token success: ${value}");
 }, onError: (err) {
-      print("get token error: ${err}");
+    // handle error
 })
 ```
 
@@ -101,11 +101,11 @@ RustorePushClient.getToken().then((value) {
 Вы можете использовать метод `RustorePushClient.deleteToken()`, для удаления текущего push-токена пользователя.
 
 ```
-RustorePushClient.deleteToken().then(() {
+RustorePushClient.deleteToken().then((value) {
       print("delete success:");
 }, onError: (err) {
-      print("delete error: ${err}");
-})
+    // handle error
+};
 ```
 
 ### События изменения токена
@@ -113,11 +113,9 @@ RustorePushClient.deleteToken().then(() {
 Периодически старый токен может становиться невалидным. Токен может выписываться заново. Чтобы понять, что выписался новый токен, нужно использовать коллбек `RustorePushClient.onNewToken()`
 
 ```
-RustorePushClient.onNewToken((value) {
-      print("on new token success: ${value}");
-}, error: (err) {
-      print("on new token err: ${err}");
-});
+RustorePushClient.onNewToken: (value) {
+    print("on new token success: ${value}");
+},
 ```
 
 ### Работа с push-сообщением
@@ -125,31 +123,53 @@ RustorePushClient.onNewToken((value) {
 Для получения информации из push-уведомления необходимо добавить коллбек `RustorePushClient.onMessageReceived()`
 
 ```
-RustorePushClient.onMessageReceived((value) {
-      print("on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}");
-}, error: (err) {
-      print("on message received error: ${err}");
-});
+RustorePushClient.onMessageReceived: (value) {
+    print("on message received success: id=${value.messageId}, data=${value.data}, notification.body: ${value.notification?.body}");
+},
 ```
 
 ### Удаление push-сообщения
 
-Для удвления push-уведомления необходимо добавить коллбек `RustorePushClient.onDeletedMessages()`
+Для удаления push-уведомления необходимо добавить коллбек `RustorePushClient.onDeletedMessages()`
 
-RustorePushClient.onDeletedMessages(() {
-      print("deleted messages");
-}, error: (err) {
-      print("on message received error: ${err}");
-});
+```
+RustorePushClient.onDeletedMessages: () {
+    print("deleted messages");
+},
+```
+
+### Открытие приложения из пуш-сообщения
+
+Для реакции на открытие приложения из пуш-уведомления необходимо добавить коллбек `RustorePushClient.onMessageOpenedApp()`
+
+```
+RustorePushClient.onMessageOpenedApp: (value) {
+    print("onMessageOpenedApp: ${value.notification?.title}");
+},
+```
+
+Обрабатывает уведомления, когда приложение открыто или находится в фоновом режиме
+
+### Получение информации из уведомления
+
+Для получения уведомления по которому было открыто приложение используйте метод `RustorePushClient.getInitialMessage()`
+
+```
+RustorePushClient.getInitialMessage().then((value) {
+    print("getInitialMessage from dart called: ${value?.notification?.title}");
+},
+```
+
+Обрабатывает уведомления, когда приложение запущено из полностью закрытого состояния
 
 ## Обработка ошибок
 
 Для обработки ошибок необходимо использовать коллбек `RustorePushClient.onError()`
 
 ```
-RustorePushClient.onError((err) {
+RustorePushClient.onError: (err) {
       print("on error: ${err}");
-});
+};
 ```
 
 ## Структура уведомления

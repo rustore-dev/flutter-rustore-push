@@ -56,6 +56,13 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         stack.add(item);
       });
+    }, onMessageOpenedApp: (value) {
+      final item = "onMessageOpenedApp success: ${value.notification?.title}";
+      print(item);
+
+      setState(() {
+        stack.add(item);
+      });
     });
 
     RustorePushClient.getToken().then((value) {
@@ -85,6 +92,12 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         stack.add(item);
       });
+    });
+
+    RustorePushClient.getInitialMessage().then((value) {
+      print("getInitialMessage from dart called: ${value?.notification?.title}");
+    }, onError: (err) {
+      print("getInitialMessage from dart error: $err");
     });
   }
 
