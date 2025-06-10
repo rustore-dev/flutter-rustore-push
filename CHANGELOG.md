@@ -1,3 +1,8 @@
+## 6.10.0
+* Updated RuStore push SDK to 6.10.0.
+* Added callback `onMessageOpenedApp`
+* Added method `getInitialMessage`
+
 ## 6.5.0
 * Updated RuStore push SDK to 6.5.0.
 * Add support gradle 8

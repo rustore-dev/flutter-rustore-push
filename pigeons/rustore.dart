@@ -50,6 +50,9 @@ abstract class RuStorePush {
 
   @async
   void unsubscribeFromTopic(String topicName);
+
+  @async
+  Message? getInitialMessage();
 }
 
 @FlutterApi()
@@ -65,4 +68,7 @@ abstract class RuStorePushCallbacks {
 
   @async
   void error(String error);
+
+  @async
+  void messageOpenedApp(Message? message);
 }

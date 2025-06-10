@@ -6,12 +6,14 @@ class RustorePushCallbacks extends RuStorePushCallbacks {
     this.onError,
     this.onMessageReceived,
     this.onNewToken,
+    this.onMessageOpenedApp,
   });
 
   Function? onDeletedMessages;
   Function? onError;
   Function? onMessageReceived;
   Function? onNewToken;
+  Function? onMessageOpenedApp;
 
   @override
   Future<void> deletedMessages() async {
@@ -40,6 +42,13 @@ class RustorePushCallbacks extends RuStorePushCallbacks {
       onNewToken!(token);
     }
   }
+
+  @override
+  Future<void> messageOpenedApp(Message? message) async {
+    if (onMessageOpenedApp != null) {
+      onMessageOpenedApp!(message);
+    }
+  }
 }
 
 class RustorePushClient {
@@ -52,12 +61,14 @@ class RustorePushClient {
     Function? onError,
     Function? onMessageReceived,
     Function? onNewToken,
+    Function? onMessageOpenedApp,
   }) async {
     RuStorePushCallbacks.setup(RustorePushCallbacks(
       onDeletedMessages: onDeletedMessages,
       onError: onError,
       onMessageReceived: onMessageReceived,
       onNewToken: onNewToken,
+      onMessageOpenedApp: onMessageOpenedApp,
     ));
 
     return;
@@ -81,5 +92,9 @@ class RustorePushClient {
 
   static Future<void> unsubscribeFromTopic(String topicName) async {
     return _api.unsubscribeFromTopic(topicName);
+  }
+
+  static Future<Message?> getInitialMessage() async {
+    return _api.getInitialMessage();
   }
 }

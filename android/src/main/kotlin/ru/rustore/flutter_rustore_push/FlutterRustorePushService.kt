@@ -13,7 +13,17 @@ import ru.rustore.sdk.pushclient.messaging.service.RuStoreMessagingService
 
 class FlutterRustorePushService : RuStoreMessagingService() {
     companion object {
+        val messages = mutableMapOf<String, RemoteMessage>()
         var client: RuStorePushCallbacks? = null
+        fun onMessageOpenedApp(message: Message?) {
+            val uiThreadHandler: Handler = Handler(Looper.getMainLooper())
+            Log.d("onMessageOpenedApp: $message")
+            if(message != null) {
+                uiThreadHandler.post {
+                    client?.messageOpenedApp(message) { }
+                }
+            }
+        }
     }
 
     private val uiThreadHandler: Handler = Handler(Looper.getMainLooper())
@@ -28,7 +38,9 @@ class FlutterRustorePushService : RuStoreMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Log.d("onMessageReceived: $message")
-
+        message.messageId?.let {
+            messages[it] = message
+        }
         var notification: Notification? = null
 
         if (message.notification != null) {
