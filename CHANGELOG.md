@@ -1,3 +1,6 @@
+## 7.2.0
+* Updated RuStore push SDK to 7.2.0.
+
 ## 6.10.0
 * Updated RuStore push SDK to 6.10.0.
 * Added callback `onMessageOpenedApp`

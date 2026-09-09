@@ -31,6 +31,6 @@
             android:value="2" />
        <meta-data
            android:name="ru.rustore.sdk.pushclient.project_id"
-           android:value="N4WMBiriSKlIk0TjbBIqiIrWkT2i7OyC" />
+           android:value="Qa1Tg6uKzoY5ux1S5M9xJzsHWncz8sin" />
     </application>
 </manifest>
