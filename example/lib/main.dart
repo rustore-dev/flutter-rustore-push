@@ -101,9 +101,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  var project = "projectID";
-  var serviceToken =
-      "CubILkB-PWdxO8vWrFQ3WKjPKqSWQoeDMStTdU-T5PIOYKyMAt-0w3EWE2tjNOD7";
+  var projectId = "Qa1Tg6uKzoY5ux1S5M9xJzsHWncz8sin";
+  var serviceToken = const String.fromEnvironment('SERVICE_TOKEN');
 
   void send(String deviceToken) async {
     if (await Permission.notification.isGranted) {
@@ -118,12 +117,15 @@ class _MyAppState extends State<MyApp> {
    }
 }""";
 
+      if (serviceToken == "") {
+        print('You did not specify a service token!');
+      } 
       print(body);
 
       http
           .post(
         Uri.parse(
-            'https://vkpns.rustore.ru/v1/projects/${project}/messages:send'),
+            'https://vkpns.rustore.ru/v1/projects/${projectId}/messages:send'),
         headers: {
           'Authorization': 'Bearer $serviceToken',
         },
